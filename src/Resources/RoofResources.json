@@ -4,27 +4,32 @@
         {
           "CategoryName": "Cover",
           "CategoryOrder": 1,
-          "LayerSequence": 1
+          "LayerSequence": 1,
+          "id": 1
         },
         {
           "CategoryName": "Deck",
           "CategoryOrder": 4,
-          "LayerSequence": 4
+          "LayerSequence": 4,
+          "id": 4
         },
         {
           "CategoryName": "Single Ply",
           "CategoryOrder": 2,
-          "LayerSequence": 2
+          "LayerSequence": 2,
+          "id": 2
         },
         {
           "CategoryName": "Multi ply",
           "CategoryOrder": 3,
-          "LayerSequence": 3
+          "LayerSequence": 3,
+          "id": 3
         },
         {
           "CategoryName": "Structure",
           "CategoryOrder": 5,
-          "LayerSequence": 5
+          "LayerSequence": 5,
+          "id": 5
         }
       ]
     }

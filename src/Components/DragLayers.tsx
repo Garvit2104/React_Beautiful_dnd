@@ -1,34 +1,48 @@
 import React from 'react';
-import { Droppable } from 'react-beautiful-dnd';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { Layer } from '../Types/LayerTypes';
+import './DragDrop.css';
 
-
-type DataLayerProper = {
-    data: any;
-    CategoryName : string,
-    CategoryOrder: number,
-    LayerSequence: number
+interface Props {
+  layers: Layer[];
 }
-const DragLayers = (props : DataLayerProper) => {
-  return(
-    <div>
-        {props.data.LayerDispalyCategories.map((layer : DataLayerProper, index : number) => (
-            <Droppable droppableId={layer.CategoryName} key={layer.CategoryName}>
-                {(provided) => (
-                    <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                         className="drag-layer"
-                    >
-                        <p className="layer-text">
-                            {layer.CategoryName}
-                        </p>
-                        {provided.placeholder}
-                    </div>
-                )}
-            </Droppable>
-        ))}
-    </div>
 
-)}
+const DragLayers: React.FC<Props> = ({ layers }) => {
+  return (
+    <Droppable droppableId="column_1">
+      {(provided) => (
+        <div
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+          className="drag-list"
+        >
+          {layers.map((layer, index) => (
+            <Draggable
+              draggableId={`left-${layer.CategoryOrder}`}   // ✅ UNIQUE ID
+              index={index}
+              key={layer.CategoryOrder}
+            >
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                  style={{
+                    ...provided.draggableProps.style, // ✅ MUST HAVE
+                  }}
+                  className="layer-item"
+                >
+                  {layer.CategoryName}
+                </div>
+              )}
+            </Draggable>
+          ))}
+
+          {provided.placeholder}
+        </div>
+      )}
+    </Droppable>
+  );
+};
 
 export default DragLayers;
