@@ -1,0 +1,31 @@
+{
+    "data": {
+      "LayerDispalyCategories": [
+        {
+          "CategoryName": "Cover",
+          "CategoryOrder": 1,
+          "LayerSequence": 1
+        },
+        {
+          "CategoryName": "Deck",
+          "CategoryOrder": 4,
+          "LayerSequence": 4
+        },
+        {
+          "CategoryName": "Single Ply",
+          "CategoryOrder": 2,
+          "LayerSequence": 2
+        },
+        {
+          "CategoryName": "Multi ply",
+          "CategoryOrder": 3,
+          "LayerSequence": 3
+        },
+        {
+          "CategoryName": "Structure",
+          "CategoryOrder": 5,
+          "LayerSequence": 5
+        }
+      ]
+    }
+  }
