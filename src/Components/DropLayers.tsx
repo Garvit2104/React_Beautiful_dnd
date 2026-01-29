@@ -1,10 +1,10 @@
 import React from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { Layer } from '../Types/LayerTypes';
+import { LayerCategory } from '../Types/LayerTypes';
 import './DragDrop.css';
 
 interface Props {
-  layers: Layer[];
+  layers: LayerCategory[];
 }
 
 const DropLayers: React.FC<Props> = ({ layers }) => {

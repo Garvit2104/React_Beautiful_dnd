@@ -1,22 +1,28 @@
-import React,{useState} from "react";
+import React,{useMemo, useState} from "react";
 import layersData from "../Resources/RoofResources.json";
 import resources from "../Resources/DashBoradResource.json";
 import {DragDropContext, DropResult} from "react-beautiful-dnd";
 import './DragDrop.css';
 import DragLayers from "./DragLayers";
 import DropLayers from "./DropLayers";
-import {Layer } from "../Types/LayerTypes";
-
+import DragLayerAccordian from './DragLayerAccordian' 
+import {LayerItem, LayerCategory, SelectedLayer } from "../Types/LayerTypes";
+import { useDragDropContext } from "../Context/DragDropContext";
 
 const DashBoard = () =>{
-   
-    const initialLayers: Layer[] = layersData.data.LayerDispalyCategories;
+    const initialLayers: LayerCategory[] = layersData.data.LayerDisplayCategories;
 
-    const[availableLayers, setAvailableLayers] = useState<Layer[]>(initialLayers);
+    const[availableCategories, setAvailableCategories] = useState<LayerCategory[]>(initialLayers);
 
-    const [selectedLayers, setSelectedLayers] = useState<Layer[]>([]);
+    const [selectedLayers, setSelectedLayers] = useState<SelectedLayer[]>([]);
 
-    const [savedState, setSavedState] = useState<Layer[]>([]);
+    const [savedState, setSavedState] = useState<SelectedLayer[]>([]);
+
+    
+    const selectedLayerIdSet = useMemo(
+    () => new Set(selectedLayers.map((x) => x.LayerId)),
+    [selectedLayers]
+  );
 
 // Drag logic
 
@@ -25,8 +31,12 @@ const DashBoard = () =>{
 
         if(!destination) return;
 
+        if(source.droppableId === destination.droppableId && source.index === destination.index){
+            return;
+        }
+
         if(source.droppableId === "column_1" && destination.droppableId === "column_2"){
-            const item = availableLayers[source.index];
+            const item = selectedLayers[source.index];
             const alreadyAdded = selectedLayers.some(l => l.id === item.id);
             if (alreadyAdded) return;
 
@@ -39,7 +49,8 @@ const DashBoard = () =>{
             items.splice(destination.index, 0, moved);
             setSelectedLayers(items);
         }
-    }
+
+ }
 
     const handleSubmit = () => {
     setSavedState(selectedLayers);
@@ -47,9 +58,10 @@ const DashBoard = () =>{
     };
 
     const handleCancel = () => {
-    setAvailableLayers(initialLayers);
-    setSelectedLayers(savedState);
+        setAvailableCategories(initialLayers);
+        setSelectedLayers(savedState);
     };
+
     return (
        <DragDropContext onDragEnd={onDragEnd}>
            <div className="dashboard">
@@ -57,7 +69,7 @@ const DashBoard = () =>{
                     <h2 className="layerName">
                         {resources.dragLayerHeading}
                     </h2>
-                    <DragLayers layers = {availableLayers} />
+                    <DragLayers layers = {availableCategories} />
                 </div>
                 <div className="drop-panel">
                     <h2 className="droplayer">
