@@ -1,0 +1,61 @@
+{
+  "data": {
+    "LayerDisplayCategories": [
+      {
+        "CategoryName": "Cover",
+        "CategoryOrder": 1,
+        "LayerSequence": 1,
+        "id": 1,
+        "Layers": [
+          { "LayerId": 101, "LayerName": "Gravel" },
+          { "LayerId": 102, "LayerName": "Ballast" },
+          { "LayerId": 103, "LayerName": "Concrete Tile" }
+        ]
+      },
+      {
+        "CategoryName": "Single Ply",
+        "CategoryOrder": 2,
+        "LayerSequence": 2,
+        "id": 2,
+        "Layers": [
+          { "LayerId": 201, "LayerName": "TPO Membrane" },
+          { "LayerId": 202, "LayerName": "PVC Membrane" },
+          { "LayerId": 203, "LayerName": "EPDM Sheet" }
+        ]
+      },
+      {
+        "CategoryName": "Multi Ply",
+        "CategoryOrder": 3,
+        "LayerSequence": 3,
+        "id": 3,
+        "Layers": [
+          { "LayerId": 301, "LayerName": "Base Sheet" },
+          { "LayerId": 302, "LayerName": "Cap Sheet" },
+          { "LayerId": 303, "LayerName": "Modified Bitumen" }
+        ]
+      },
+      {
+        "CategoryName": "Deck",
+        "CategoryOrder": 4,
+        "LayerSequence": 4,
+        "id": 4,
+        "Layers": [
+          { "LayerId": 401, "LayerName": "Steel Deck" },
+          { "LayerId": 402, "LayerName": "Concrete Deck" },
+          { "LayerId": 403, "LayerName": "Wood Deck" }
+        ]
+      },
+      {
+        "CategoryName": "Structure",
+        "CategoryOrder": 5,
+        "LayerSequence": 5,
+        "id": 5,
+        "Layers": [
+          { "LayerId": 501, "LayerName": "Beam" },
+          { "LayerId": 502, "LayerName": "Column" },
+          { "LayerId": 503, "LayerName": "Truss" }
+        ]
+      }
+    ]
+  }
+}

@@ -18,7 +18,7 @@ const DragLayers: React.FC<Props> = ({ layers }) => {
         >
           {layers.map((layer, index) => (
             <Draggable
-              draggableId={`left-${layer.CategoryOrder}`}   // ✅ UNIQUE ID
+              draggableId={`left-${layer.CategoryOrder}`}  
               index={index}
               key={layer.CategoryOrder}
             >
@@ -28,7 +28,7 @@ const DragLayers: React.FC<Props> = ({ layers }) => {
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
                   style={{
-                    ...provided.draggableProps.style, // ✅ MUST HAVE
+                    ...provided.draggableProps.style, 
                   }}
                   className="layer-item"
                 >
