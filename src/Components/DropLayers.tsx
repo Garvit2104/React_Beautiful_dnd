@@ -1,10 +1,10 @@
 import React from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { LayerCategory } from '../Types/LayerTypes';
+import { SelectedLayer } from '../Types/LayerTypes';
 import './DragDrop.css';
 
 interface Props {
-  layers: LayerCategory[];
+  layers: SelectedLayer[];
 }
 
 const DropLayers: React.FC<Props> = ({ layers }) => {
@@ -14,25 +14,25 @@ const DropLayers: React.FC<Props> = ({ layers }) => {
         <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className="drop-list"
+            className="drop-list"
         >
           {layers.map((layer, index) => (
             <Draggable
-              draggableId={`right-${layer.CategoryOrder}`} // ✅ UNIQUE ID
+              key={layer.LayerId}
+              draggableId={`right-${layer.LayerId}`}
               index={index}
-              key={layer.CategoryOrder}
             >
               {(provided) => (
                 <div
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
+                  className="drop-item"
                   style={{
-                    ...provided.draggableProps.style, // ✅ MUST HAVE
+                    ...provided.draggableProps.style
                   }}
-                  className="layer-item"
                 >
-                  {layer.CategoryName}
+                  {layer.LayerName}
                 </div>
               )}
             </Draggable>

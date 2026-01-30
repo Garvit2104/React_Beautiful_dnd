@@ -1,27 +1,48 @@
+/* Main wrapper to center content */
+.dashboard-wrapper {
+  max-width: 1100px;        /* control page width */
+  margin: 40px auto;         /* center horizontally */
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Dashboard panels layout */
+.dashboard {
+  display: flex;
+  justify-content: center;   /* center panels */
+  gap: 60px;                  /* spacing between panels */
+  align-items: flex-start;
+}
+
+/* Drag panel */
 .drag-panel {
   width: 450px;
   min-height: 300px;
   border: 2px dashed black;
   padding: 10px;
-  margin-left: 10px;
   background: #fafafa;
+  border-radius: 8px;
 }
 
+/* Drop panel */
 .drop-panel {
   width: 450px;
   min-height: 300px;
   border: 2px dashed black;
   padding: 10px;
-  margin-right: 10px;
   background: #fafafa;
+  border-radius: 8px;
 }
 
-/* IMPORTANT: droppable inner list */
+/* Droppable lists */
 .drag-list,
 .drop-list {
   min-height: 250px;
   padding: 10px;
   background: #f5f5f5;
+  border-radius: 6px;
 }
 
 /* Draggable item */
@@ -33,14 +54,14 @@
   margin: 8px 0;
   border-radius: 6px;
   user-select: none;
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
-/* Hover effect */
 .layer-item:hover {
   background: rgb(31, 127, 76);
 }
 
-/* Drop panel items (optional) */
+/* Drop panel items */
 .drop-item {
   background: rgb(166, 88, 10);
   border: 2px solid black;
@@ -50,18 +71,8 @@
   border-radius: 6px;
 }
 
-.dashboard {
-  display: flex;
-  flex-direction: row;
-  gap: 120px;   /* ✅ nice spacing */
-  align-items: flex-start;
-}
-
-.layer-item {
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-
+/* Buttons center */
 .buttons {
+  text-align: center;
   margin-top: 20px;
 }

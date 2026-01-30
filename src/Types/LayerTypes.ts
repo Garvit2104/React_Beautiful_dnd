@@ -28,11 +28,7 @@ export const initialState: DragDropState = {
 };
 
 
-export interface SelectedLayer extends LayerItem {
-  id: number;
-  CategoryId: number;
-  CategoryName: string;
-}
+export type SelectedLayer = LayerItem;
 
 
 
