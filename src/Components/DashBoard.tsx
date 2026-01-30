@@ -8,6 +8,7 @@ import DropLayers from "./DropLayers";
 import DragLayerAccordion from "./DragLayerAccordion";
 import { LayerItem, LayerCategory, SelectedLayer } from "../Types/LayerTypes";
 import { useDragDropContext } from "../Context/DragDropContext";
+import DroppedLayerTable from "./DroppedLayerTable";
 
 const DashBoard = () => {
   const initialLayers: LayerCategory[] = layersData.data.LayerDisplayCategories;
@@ -42,7 +43,7 @@ const DashBoard = () => {
       if (!draggedLayer) return;
 
       const alreadyAdded = selectedLayers.some(
-        (l) => l.LayerId === draggedLayer.LayerId,
+        (l) => l.LayerId === draggedLayer.LayerId
       );
       if (alreadyAdded) return;
 
@@ -63,39 +64,42 @@ const DashBoard = () => {
 
   const handleSubmit = () => {
     setSavedState(selectedLayers);
-    alert("Layers Saved");
+    const layerName = selectedLayers.map((layer) => layer.LayerName).join(", ");
+    const layerIds = selectedLayers.map((layer) => layer.LayerId);
+    alert(`Selected Layers: ${layerName} and IDs: ${layerIds}`);
   };
 
   const handleCancel = () => {
-    setSelectedLayers(savedState);
+    setSelectedLayers([]);
+    setSavedState([]);
+
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-  <div className="dashboard-wrapper">
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="dashboard-wrapper">
+          <div className="dashboard">
+            <div className="drag-panel">
+              <h2>Available Layers</h2>
+              <DragLayerAccordion layers={availableCategories} />
+            </div>
 
-    <div className="dashboard">
-      
-      <div className="drag-panel">
-        <h2>Available Layers</h2>
-        <DragLayerAccordion layers={availableCategories} />
-      </div>
+            <div className="drop-panel">
+              <h2>Selected Layers</h2>
+              <DropLayers layers={selectedLayers} />
+            </div>
+          </div>
 
-      <div className="drop-panel">
-        <h2>Selected Layers</h2>
-        <DropLayers layers={selectedLayers} />
-      </div>
-
-    </div>
-
-    <div className="buttons">
-      <button onClick={handleSubmit}>Submit</button>
-      <button onClick={handleCancel}>Cancel</button>
-    </div>
-
-  </div>
-</DragDropContext>
-
+          <div className="buttons">
+            <button onClick={handleSubmit}>Submit</button>
+            <button onClick={handleCancel}>Cancel</button>
+          </div>
+            <div className="Selected-layers">
+                <h2> Submitted Layers</h2>
+                <DroppedLayerTable layers={savedState} />
+            </div>
+        </div>
+      </DragDropContext>  
   );
 };
 

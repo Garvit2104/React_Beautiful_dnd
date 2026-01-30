@@ -1,0 +1,24 @@
+.layer-table{
+  width:100%;
+  border-collapse:collapse;
+    margin-top: 20px;
+}
+
+.layer-table th,
+.layer-table td{
+  border:1px solid black;
+  padding:8px;
+  text-align:left;
+}
+
+.layer-table th{
+  background-color:#f2f2f2;
+
+}
+.layer-table tr:nth-child(even){
+  background-color:#f9f9f9;
+}
+
+.table-section{
+  margin-top:20px;
+}
