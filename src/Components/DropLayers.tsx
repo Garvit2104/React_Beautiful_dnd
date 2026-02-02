@@ -1,13 +1,16 @@
 import React from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { SelectedLayer } from '../Types/LayerTypes';
+import { useDragDrop } from '../Context/DragDropContext';
+import DeleteIcon from "@mui/icons-material/Close";
 import './DragDrop.css';
+import { LayerItem } from '../Types/LayerTypes';
 
 interface Props {
-  layers: SelectedLayer[];
+  layers: LayerItem[];
 }
 
-const DropLayers: React.FC<Props> = ({ layers }) => {
+const DropLayers = ({ layers }: Props) => {
+  const { dispatch } = useDragDrop();
   return (
     <Droppable droppableId="column_2">
       {(provided) => (
@@ -33,6 +36,10 @@ const DropLayers: React.FC<Props> = ({ layers }) => {
                   }}
                 >
                   {layer.LayerName}
+                  <DeleteIcon
+                    style={{ cursor: "pointer", float: "right" }}
+                    onClick={() => dispatch({ type: "REMOVE_SELECTED_LAYER", payload: layer.LayerId })}
+                  />
                 </div>
               )}
             </Draggable>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import layersData from "../Resources/RoofResources.json";
 import resources from "../Resources/DashBoradResource.json";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
@@ -7,18 +7,21 @@ import DragLayers from "./DragLayers";
 import DropLayers from "./DropLayers";
 import DragLayerAccordion from "./DragLayerAccordion";
 import { LayerItem, LayerCategory, SelectedLayer } from "../Types/LayerTypes";
-import { useDragDropContext } from "../Context/DragDropContext";
+
 import DroppedLayerTable from "./DroppedLayerTable";
+import { useDragDrop } from "../Context/DragDropContext";
 
 const DashBoard = () => {
-  const initialLayers: LayerCategory[] = layersData.data.LayerDisplayCategories;
+  const { state, dispatch } = useDragDrop();
+  const { availableCategories, selectedLayers } = state;
 
-  const [availableCategories, setAvailableCategories] =
-    useState<LayerCategory[]>(initialLayers);
-
-  const [selectedLayers, setSelectedLayers] = useState<SelectedLayer[]>([]);
-
-  const [savedState, setSavedState] = useState<SelectedLayer[]>([]);
+  // Load initial categories
+  useEffect(() => {
+    dispatch({
+      type: "SET_AVAILABLE_CATEGORIES",
+      payload: layersData.data.LayerDisplayCategories,
+    });
+  }, []);
 
   // Drag logic
 
@@ -26,54 +29,31 @@ const DashBoard = () => {
     const { source, destination, draggableId } = result;
     if (!destination) return;
 
-    if (
-      source.droppableId === destination.droppableId &&
-      source.index === destination.index
-    )
-      return;
-
-    // LEFT -> RIGHT
+    // LEFT → RIGHT
     if (destination.droppableId === "column_2") {
       const layerId = Number(draggableId.replace("layer-", ""));
-
-      const draggedLayer = availableCategories
-        .flatMap((c) => c.Layers)
-        .find((l) => l.LayerId === layerId);
+      const draggedLayer = availableCategories.flatMap(c => c.Layers).find(l => l.LayerId === layerId);
 
       if (!draggedLayer) return;
-
-      const alreadyAdded = selectedLayers.some(
-        (l) => l.LayerId === draggedLayer.LayerId
-      );
-      if (alreadyAdded) return;
-
-      setSelectedLayers((prev) => [...prev, draggedLayer]);
+      dispatch({ type: "ADD_SELECTED_LAYER", payload: draggedLayer });
     }
 
-    // Reorder RIGHT
-    if (
-      source.droppableId === "column_2" &&
-      destination.droppableId === "column_2"
-    ) {
-      const items = Array.from(selectedLayers);
-      const [moved] = items.splice(source.index, 1);
-      items.splice(destination.index, 0, moved);
-      setSelectedLayers(items);
+    // REORDER RIGHT
+    if (source.droppableId === "column_2" && destination.droppableId === "column_2") {
+      dispatch({
+        type: "REORDER_SELECTED_LAYERS",
+        payload: { fromIndex: source.index, toIndex: destination.index },
+      });
     }
   };
 
-  const handleSubmit = () => {
-    setSavedState(selectedLayers);
-    const layerName = selectedLayers.map((layer) => layer.LayerName).join(", ");
-    const layerIds = selectedLayers.map((layer) => layer.LayerId);
-    alert(`Selected Layers: ${layerName} and IDs: ${layerIds}`);
-  };
+    const handleSubmit = () => {
+        dispatch({ type: "SAVE_LAYERS" });
+    };
 
-  const handleCancel = () => {
-    setSelectedLayers([]);
-    setSavedState([]);
-
-  };
+    const handleCancel = () => {
+        dispatch({ type: "RESET_LAYERS" });
+    };
 
   return (
       <DragDropContext onDragEnd={onDragEnd}>
@@ -96,7 +76,7 @@ const DashBoard = () => {
           </div>
             <div className="Selected-layers">
                 <h2> Submitted Layers</h2>
-                <DroppedLayerTable layers={savedState} />
+                <DroppedLayerTable layers={state.savedLayers} />
             </div>
         </div>
       </DragDropContext>  

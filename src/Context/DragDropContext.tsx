@@ -1,28 +1,26 @@
-import React, {createContext, useContext} from 'react';
-import { DragDropState, initialState } from '../Types/LayerTypes';
-import { dragDropReducer, DragDropAction } from '../Actions/DragDropReducer';
+import React, { createContext, useContext, useReducer } from "react";
+import { DragDropState, initialState } from "../Types/LayerTypes";
+import { dragDropReducer, DragDropAction } from "../Actions/DragDropReducer";
 
 type DragDropContextType = {
-    state: DragDropState;
-    dispatch: React.Dispatch<DragDropAction>;
+  state: DragDropState;
+  dispatch: React.Dispatch<DragDropAction>;
 };
-  
-export const DragAndDropContext = createContext<DragDropContextType | undefined>(undefined);
 
-export const useDragDropContext = () => {
-    const ctx = useContext(DragAndDropContext);
-    if (!ctx) {
-      throw new Error("useDragDropContext must be used within DragDropContextProvider");
-    }
-    return ctx;
-  };
-  
+const DragDropContext = createContext<DragDropContextType | null>(null);
 
-export const DragDropContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [state, dispatch] = React.useReducer(dragDropReducer, initialState);
-            return (
-        <DragAndDropContext.Provider value={{ state, dispatch }}>
-            {children}
-        </DragAndDropContext.Provider>
-    );
-}
+export const DragDropProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [state, dispatch] = useReducer(dragDropReducer, initialState);
+
+  return (
+    <DragDropContext.Provider value={{ state, dispatch }}>
+      {children}
+    </DragDropContext.Provider>
+  );
+};
+
+export const useDragDrop = () => {
+  const context = useContext(DragDropContext);
+  if (!context) throw new Error("useDragDrop must be inside Provider");
+  return context;
+};
