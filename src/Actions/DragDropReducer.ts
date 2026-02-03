@@ -1,4 +1,4 @@
-import { LayerCategory, SelectedLayer, DragDropState, initialState, LayerItem } from "../Types/LayerTypes";
+import { LayerCategory, SelectedLayer, DragDropState, initialState, LayerItem, LayerMapping } from "../Types/LayerTypes";
 
 export type DragDropAction =
   | { type: "SET_AVAILABLE_CATEGORIES"; payload: LayerCategory[] }
@@ -6,7 +6,9 @@ export type DragDropAction =
   | { type: "SAVE_LAYERS" }
   | { type: "REMOVE_SELECTED_LAYER"; payload: number }
   | { type: "REORDER_SELECTED_LAYERS"; payload: { fromIndex: number; toIndex: number } }
-  | { type: "RESET_LAYERS" };
+  | { type: "RESET_LAYERS" }
+  | { type: "SET_ACTIVE_LAYER"; payload: number }
+  | { type: "ADD_MAPPING"; payload: LayerMapping }
 
 export const dragDropReducer = (state: DragDropState, action: DragDropAction): DragDropState => {
   switch (action.type) {
@@ -42,7 +44,16 @@ export const dragDropReducer = (state: DragDropState, action: DragDropAction): D
         selectedLayers: [],
         savedLayers: [],
       };
-    
+
+    case "SET_ACTIVE_LAYER":
+      return { ...state, activeLayerId: action.payload };
+
+    case "ADD_MAPPING":
+      return {
+      ...state,
+      mappings: [...state.mappings, action.payload],
+    };
+   
     default:
       return state;
   }

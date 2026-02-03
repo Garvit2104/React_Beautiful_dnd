@@ -10,11 +10,12 @@ interface Props {
 }
 
 const DropLayers = ({ layers }: Props) => {
-  const { dispatch } = useDragDrop();
+  const { state, dispatch  } = useDragDrop();
+  const { activeLayerId } = state;
   return (
     <Droppable droppableId="column_2">
       {(provided) => (
-        <div
+        <div    
           ref={provided.innerRef}
           {...provided.droppableProps}
             className="drop-list"
@@ -26,20 +27,32 @@ const DropLayers = ({ layers }: Props) => {
               index={index}
             >
               {(provided) => (
-                <div
+                <div id={`layer-${layer.LayerId}`}
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
                   className="drop-item"
                   style={{
-                    ...provided.draggableProps.style
-                  }}
+                    ...provided.draggableProps.style,
+                    background:
+                      activeLayerId === layer.LayerId
+                        ? "#1976d2"
+                        : undefined,
+                    color:
+                      activeLayerId === layer.LayerId ? "#fff" : undefined,
+                  }}    
+                  onClick={() => dispatch({
+                      type: "SET_ACTIVE_LAYER",
+                      payload: layer.LayerId,
+                    })
+                  }
                 >
                   {layer.LayerName}
                   <DeleteIcon
                     style={{ cursor: "pointer", float: "right" }}
                     onClick={() => dispatch({ type: "REMOVE_SELECTED_LAYER", payload: layer.LayerId })}
                   />
+
                 </div>
               )}
             </Draggable>
@@ -48,7 +61,7 @@ const DropLayers = ({ layers }: Props) => {
           {provided.placeholder}
         </div>
       )}
-    </Droppable>
+    </Droppable>  
   );
 };
 

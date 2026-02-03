@@ -10,6 +10,7 @@ import { LayerItem, LayerCategory, SelectedLayer } from "../Types/LayerTypes";
 
 import DroppedLayerTable from "./DroppedLayerTable";
 import { useDragDrop } from "../Context/DragDropContext";
+import MappedArrowComponent from "./MappedArrowComponent";
 
 const DashBoard = () => {
   const { state, dispatch } = useDragDrop();
@@ -77,6 +78,7 @@ const DashBoard = () => {
             <div className="Selected-layers">
                 <h2> Submitted Layers</h2>
                 <DroppedLayerTable layers={state.savedLayers} />
+          <MappedArrowComponent />
             </div>
         </div>
       </DragDropContext>  
