@@ -1,83 +1,97 @@
 import React, { useState } from "react";
 import { useDragDrop } from "../Context/DragDropContext";
 import { MenuItem, Select, Button } from "@mui/material";
+import { SelectedLayer } from "../Types/LayerTypes";
+import ArrowComponent from "./ArrowComponent";
+import "./Mapping.css";
 
-const MappedArrowComponent = () => {
+interface Props {
+  layers: SelectedLayer[];
+  mappings: Array<{ fromIndex: number; toIndex: number }>;
+  setMappings: React.Dispatch<React.SetStateAction<Array<{ fromIndex: number; toIndex: number }>>>;
+}
+const MappedArrowComponent = ({ layers, mappings, setMappings }: Props) => {
   const { state, dispatch } = useDragDrop();
-  const { savedLayers } = state;
 
   const [fromIndex, setFromIndex] = useState<number | "">("");
   const [toIndex, setToIndex] = useState<number | "">("");
 
-  // show only when layers are submitted
-  if (savedLayers.length < 2) return null;
 
-  const fromOptions = savedLayers.slice(0, savedLayers.length - 1);
-  const toOptions =
-    fromIndex === ""
-      ? []
-      : savedLayers.slice(Number(fromIndex) + 1);
+  // show only when layers are submitted
+  if (!layers) return null;
+
+  const fromOptions = layers.slice(0, layers.length - 1);
+  const toOptions = fromIndex === "" ? [] : layers.slice(Number(fromIndex) + 1);
 
   const handleMap = () => {
-    if (fromIndex === "" || toIndex === "") return;
-
-    dispatch({
-      type: "ADD_MAPPING",
-      payload: {
-        fromLayerId: savedLayers[fromIndex].LayerId,
-        toLayerId: savedLayers[toIndex].LayerId,
+    setMappings((prev) => [
+      ...prev,
+      {
+        fromIndex: Number(fromIndex),
+        toIndex: Number(toIndex),
       },
-    });
+    ]);
 
     setFromIndex("");
     setToIndex("");
   };
 
   return (
-    <div style={{ marginTop: 30 }}>
-      <h3>Map Layers</h3>
+    <div className="mapping-container">
+      <h3 className="mapping-title">Map Layers</h3>
 
-      <Select
-        fullWidth
-        displayEmpty
-        value={fromIndex}
-        onChange={(e) => setFromIndex(Number(e.target.value))}
-      >
-        <MenuItem value="">From Layer</MenuItem>
-        {fromOptions.map((l, idx) => (
-          <MenuItem key={l.LayerId} value={idx}>
-            {l.LayerName}
-          </MenuItem>
-        ))}
-      </Select>
-
-      <Select
-        fullWidth
-        displayEmpty
-        value={toIndex}
-        onChange={(e) => setToIndex(Number(e.target.value))}
-        style={{ marginTop: 10 }}
-        disabled={fromIndex === ""}
-      >
-        <MenuItem value="">To Layer</MenuItem>
-        {toOptions.map((l, idx) => (
-          <MenuItem
-            key={l.LayerId}
-            value={Number(fromIndex) + 1 + idx}
+      <div className="mapping-row">
+        {/* FROM */}
+        <div className="mapping-select">
+          <label>From Layer</label>
+          <Select
+            fullWidth
+            displayEmpty
+            value={fromIndex}
+            onChange={(e) => setFromIndex(Number(e.target.value))}
           >
-            {l.LayerName}
-          </MenuItem>
-        ))}
-      </Select>
+            <MenuItem value="">Select</MenuItem>
+            {fromOptions.map((l, idx) => (
+              <MenuItem key={l.LayerId} value={idx}>
+                {l.LayerName}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
 
-      <Button
-        fullWidth
-        variant="contained"
-        style={{ marginTop: 10 }}
-        onClick={handleMap}
-      >
-        Map
-      </Button>
+      
+
+        {/* TO */}
+        <div className="mapping-select">
+          <label>To Layer</label>
+          <Select
+            fullWidth
+            displayEmpty
+            value={toIndex}
+            onChange={(e) => setToIndex(Number(e.target.value))}
+            disabled={fromIndex === ""}
+          >
+            <MenuItem value="">Select</MenuItem>
+            {toOptions.map((l, idx) => (
+              <MenuItem key={l.LayerId} value={Number(fromIndex) + 1 + idx}>
+                {l.LayerName}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
+      </div>
+
+      {/* MAP BUTTON */}
+      <div className="mapping-action">
+        <Button
+          fullWidth
+          variant="contained"
+          disabled={fromIndex === "" || toIndex === ""}
+          onClick={handleMap}
+        >
+          Map
+        </Button>
+      </div>
     </div>
   );
 };

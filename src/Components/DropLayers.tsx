@@ -3,22 +3,24 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { useDragDrop } from '../Context/DragDropContext';
 import DeleteIcon from "@mui/icons-material/Close";
 import './DragDrop.css';
-import { LayerItem } from '../Types/LayerTypes';
+import { LayerItem, SelectedLayer } from '../Types/LayerTypes';
+import ArrowComponent from './ArrowComponent';
 
 interface Props {
-  layers: LayerItem[];
+  layers: SelectedLayer[];
+  mappings: Array<{ fromIndex: number; toIndex: number }>;
 }
 
-const DropLayers = ({ layers }: Props) => {
+const DropLayers = ({ layers, mappings }: Props) => {
   const { state, dispatch  } = useDragDrop();
   const { activeLayerId } = state;
   return (
     <Droppable droppableId="column_2">
       {(provided) => (
-        <div    
+        <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-            className="drop-list"
+          className="drop-list"
         >
           {layers.map((layer, index) => (
             <Draggable
@@ -27,32 +29,51 @@ const DropLayers = ({ layers }: Props) => {
               index={index}
             >
               {(provided) => (
-                <div id={`layer-${layer.LayerId}`}
+                <div
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
-                  className="drop-item"
-                  style={{
-                    ...provided.draggableProps.style,
-                    background:
-                      activeLayerId === layer.LayerId
-                        ? "#1976d2"
-                        : undefined,
-                    color:
-                      activeLayerId === layer.LayerId ? "#fff" : undefined,
-                  }}    
-                  onClick={() => dispatch({
-                      type: "SET_ACTIVE_LAYER",
-                      payload: layer.LayerId,
-                    })
-                  }
+                  className="drop-row"
                 >
-                  {layer.LayerName}
-                  <DeleteIcon
-                    style={{ cursor: "pointer", float: "right" }}
-                    onClick={() => dispatch({ type: "REMOVE_SELECTED_LAYER", payload: layer.LayerId })}
-                  />
+                  {/* Layer */}
+                  <div
+                    id={`layer-${index}`}
+                    className="drop-item"
+                    style={{
+                      background:
+                        activeLayerId === layer.LayerId
+                          ? "#1976d2"
+                          : undefined,
+                      color:
+                        activeLayerId === layer.LayerId ? "#fff" : undefined,
+                    }}
+                    onClick={() =>
+                      dispatch({
+                        type: "SET_ACTIVE_LAYER",
+                        payload: layer.LayerId,
+                      })
+                    }
+                  >
+                    {layer.LayerName}
+                    <DeleteIcon
+                      style={{ float: "right", cursor: "pointer" }}
+                      onClick={() =>
+                        dispatch({
+                          type: "REMOVE_SELECTED_LAYER",
+                          payload: layer.LayerId,
+                        })
+                      }
+                    />
+                  </div>
 
+                  {/* Arrow Column */}
+                  <div className="arrow-column">
+                    {mappings
+                      .filter((m) => m.fromIndex === index)
+                      .map((_, i) => (
+                        <ArrowComponent key={i} fromIndex={0} toIndex={0} />
+                      ))}
+                  </div>
                 </div>
               )}
             </Draggable>
@@ -61,7 +82,7 @@ const DropLayers = ({ layers }: Props) => {
           {provided.placeholder}
         </div>
       )}
-    </Droppable>  
+    </Droppable>
   );
 };
 

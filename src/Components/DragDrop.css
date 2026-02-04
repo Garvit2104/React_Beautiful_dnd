@@ -1,4 +1,4 @@
-/* Main wrapper to center content */
+
 .dashboard-wrapper {
   max-width: 1100px;        /* control page width */
   margin: 40px auto;         /* center horizontally */
@@ -8,7 +8,7 @@
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* Dashboard panels layout */
+
 .dashboard {
   display: flex;
   justify-content: center;   /* center panels */
@@ -43,6 +43,8 @@
   padding: 10px;
   background: #f5f5f5;
   border-radius: 6px;
+  display: flex;           
+  flex-direction: column;
 }
 
 /* Draggable item */
@@ -75,4 +77,20 @@
 .buttons {
   text-align: center;
   margin-top: 20px;
+}
+
+.drop-list {
+  position: relative; /* REQUIRED for absolute arrows */
+}
+
+/* One row = layer + arrow column */
+.drop-row {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+}
+
+/* Existing drop-item stays SAME size */
+.drop-item {
+  width: 100%;
 }

@@ -1,0 +1,25 @@
+/* Wrapper */
+.arrow-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 60px;            /* 🔥 IMPORTANT */
+  margin-top: 4px;
+}
+
+/* Vertical line */
+.arrow-line {
+  width: 2px;
+  height: 40px;            /* 🔥 FIXED HEIGHT */
+  background-color: #333;
+}
+
+/* Arrow head (DOWNWARD) */
+.arrow-head {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid #333; /* ⬇ DOWNWARD */
+}
